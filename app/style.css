@@ -1,7 +1,203 @@
-body { font-family: Arial, sans-serif; margin: 24px; color: #222; }
-header { display: flex; justify-content: space-between; align-items: baseline; }
-.controls { display: flex; gap: 16px; margin: 12px 0; align-items: center; }
-.import input { font-size: 12px; }
-table { border-collapse: collapse; width: 100%; }
-th, td { border-bottom: 1px solid #ddd; padding: 6px 8px; text-align: left; vertical-align: top; white-space: pre-line; }
-th { background: #f2f2f2; }
+/* Leonida after dark — neon-noir for Vice City.
+   Violet-black ground, magenta and cyan neon, amber for gold. System fonts
+   only; no images, no web fonts, nothing fetched. One memorable element: the
+   neon-sign masthead. Everything else stays flat and disciplined. */
+:root {
+  color-scheme: dark;
+  --ink: #f4eefc;
+  --muted: #b9a8d8;
+  --ground: #150829;
+  --panel: #20103d;
+  --panel-edge: #3d2470;
+  --magenta: #ff2e88;
+  --cyan: #2ee6ff;
+  --amber: #ffc53d;
+  --earned: #37e6a0;
+}
+
+* { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  background: var(--ground);
+  color: var(--ink);
+  font-family: "Segoe UI", system-ui, -apple-system, "Helvetica Neue", Arial, sans-serif;
+  line-height: 1.5;
+}
+
+.masthead {
+  padding: 28px 24px 8px;
+  border-bottom: 3px solid var(--magenta);
+  background: linear-gradient(180deg, #2a0e4d 0%, #150829 100%);
+}
+
+.neon-sign {
+  margin: 0;
+  font-size: 54px;
+  line-height: 1;
+  letter-spacing: 0.14em;
+  font-weight: 800;
+  color: #fff;
+  text-shadow:
+    0 0 6px var(--magenta),
+    0 0 22px var(--magenta),
+    0 0 46px #b3125e;
+}
+
+.neon-sign .cyan-word {
+  color: var(--cyan);
+  text-shadow:
+    0 0 6px var(--cyan),
+    0 0 22px var(--cyan),
+    0 0 46px #0a7d99;
+}
+
+.masthead h1 {
+  margin: 12px 0 4px;
+  font-size: 24px;
+}
+
+.standfirst {
+  margin: 0 0 16px;
+  color: var(--muted);
+  max-width: 72ch;
+}
+
+.skyline { display: block; width: 100%; height: 34px; }
+
+main { padding: 0 24px 40px; max-width: 1180px; margin: 0 auto; }
+
+.progress-wrap { margin: 20px 0 8px; }
+.progress-wrap h2, .roadmap h2, .list-head h2 { font-size: 19px; margin: 0 0 6px; }
+
+#progress-text { font-size: 22px; font-weight: 700; margin: 0 0 8px; }
+#grade-counts { color: var(--muted); margin: 8px 0 0; }
+
+.progress-bar {
+  height: 14px;
+  border: 1px solid var(--panel-edge);
+  border-radius: 7px;
+  overflow: hidden;
+  background: var(--panel);
+}
+#progress-fill {
+  height: 100%;
+  width: 0;
+  background: linear-gradient(90deg, var(--magenta), var(--cyan));
+  transition: width 0.25s ease;
+}
+
+.roadmap {
+  margin: 24px 0;
+  padding: 18px 20px;
+  border: 1px solid var(--panel-edge);
+  border-left: 4px solid var(--cyan);
+  background: var(--panel);
+}
+.roadmap ol { margin: 8px 0 0; padding-left: 22px; }
+.roadmap li { margin: 8px 0; }
+.roadmap li strong { color: var(--cyan); }
+.missable-callout {
+  margin: 14px 0 0;
+  padding: 10px 12px;
+  border: 1px solid var(--magenta);
+  color: #ffd7ea;
+}
+.missable-callout strong { color: var(--magenta); }
+
+.controls {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  align-items: end;
+  margin: 20px 0 10px;
+}
+.controls label { display: flex; flex-direction: column; gap: 4px; font-size: 13px; color: var(--muted); }
+.controls input[type="search"], .controls select {
+  background: var(--panel);
+  color: var(--ink);
+  border: 1px solid var(--panel-edge);
+  border-radius: 4px;
+  padding: 8px 10px;
+  font: inherit;
+}
+.controls input[type="search"] { min-width: 220px; }
+.check-row { flex-direction: row !important; align-items: center; gap: 6px !important; color: var(--ink) !important; }
+button, .import-label {
+  background: var(--magenta);
+  color: #fff;
+  border: none;
+  border-radius: 4px;
+  padding: 9px 14px;
+  font: inherit;
+  font-weight: 600;
+  cursor: pointer;
+}
+button:hover, .import-label:hover { filter: brightness(1.15); }
+button:disabled { opacity: 0.45; cursor: default; }
+.import-label { background: var(--panel); border: 1px solid var(--panel-edge); }
+.import-label input { position: absolute; width: 1px; height: 1px; opacity: 0; }
+#result-count { color: var(--muted); margin: 0 0 12px; }
+
+.layout { display: grid; grid-template-columns: minmax(0, 1fr) 380px; gap: 20px; align-items: start; }
+@media (max-width: 900px) { .layout { grid-template-columns: 1fr; } }
+
+#trophy-list { display: grid; gap: 10px; }
+.trophy {
+  display: flex;
+  gap: 12px;
+  padding: 12px 14px;
+  border: 1px solid var(--panel-edge);
+  background: var(--panel);
+  border-radius: 6px;
+  content-visibility: auto;
+}
+.trophy.is-earned { border-color: var(--earned); }
+.trophy input[type="checkbox"] { width: 20px; height: 20px; margin-top: 4px; accent-color: var(--earned); flex: none; }
+.trophy-body { min-width: 0; }
+.trophy h3 { margin: 0 0 2px; font-size: 16px; }
+.trophy-desc { margin: 0 0 6px; color: var(--muted); font-size: 14px; }
+.trophy-tags { margin: 0 0 8px; font-size: 12px; color: var(--cyan); }
+.trophy-tags::first-line { text-transform: capitalize; }
+.guide-btn { background: transparent; border: 1px solid var(--cyan); color: var(--cyan); padding: 6px 10px; }
+.guide-btn:hover { background: var(--cyan); color: #08131a; }
+
+#guide-panel {
+  position: sticky;
+  top: 16px;
+  padding: 18px;
+  border: 1px solid var(--magenta);
+  background: var(--panel);
+  border-radius: 6px;
+}
+#guide-panel h2 { margin: 0 0 4px; font-size: 20px; }
+.detail-meta { color: var(--cyan); font-size: 13px; margin: 0 0 10px; }
+.detail-desc { color: var(--muted); font-style: italic; margin: 0 0 12px; }
+.detail-guide { margin: 0 0 12px; }
+.detail-source { color: var(--amber); font-size: 13px; margin: 0 0 8px; }
+.detail-note { color: var(--muted); font-size: 13px; margin: 0; }
+.empty { color: var(--muted); padding: 16px; border: 1px dashed var(--panel-edge); }
+
+footer { margin-top: 32px; color: var(--muted); font-size: 13px; }
+footer p { margin: 6px 0; max-width: 80ch; }
+
+:focus-visible { outline: 2px solid var(--cyan); outline-offset: 2px; }
+.skip-link {
+  position: absolute;
+  left: 12px;
+  top: -48px;
+  background: var(--cyan);
+  color: #08131a;
+  padding: 8px 12px;
+  border-radius: 4px;
+  font-weight: 700;
+  z-index: 10;
+}
+.skip-link:focus { top: 12px; }
+@media (prefers-reduced-motion: reduce) { * { transition: none !important; } }
+
+/* Screenshot focus views: hide the sections above the framed part so it
+   sits at the top of the viewport without any scrolling. */
+.focus-list .roadmap { display: none; }
+.focus-roadmap .masthead, .focus-roadmap .progress-wrap { display: none; }
+.focus-roadmap .roadmap { margin-top: 20px; }
